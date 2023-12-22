@@ -1,0 +1,136 @@
+:root {
+  --custom-green: #33b667;
+  --font-inter: "Inter", sans-serif;
+  --border-color: #ddd;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  font-family: var(--font-inter);
+}
+
+header {
+  background-color: var(--custom-green);
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-inter);
+}
+
+header .title {
+  color: #fff;
+  text-align: center;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 50px;
+  align-items: center;
+  height: calc(100vh - 76px);
+}
+
+.subtitle {
+  font-size: calc(1rem + 0.5vw);
+}
+
+.scoreboard {
+  width: 340px;
+  height: 394px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: #fff;
+
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.rounds-info p {
+  color: #000;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rounds-info .rounds-title {
+  font-size: 16px;
+}
+
+.rounds-info .rounds-number {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.game-board {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+  color: #000;
+  padding-bottom: 15px;
+}
+
+.game-board .team-home,
+.team-away {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  width: 100%;
+}
+
+.team-home {
+  margin-right: 10px;
+}
+
+.team-away {
+  margin-left: 10px;
+}
+
+.game-board .score {
+  font-size: 15px;
+}
+
+.game-board .game-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
+  padding: 14px 0;
+}
+
+.game-board .game-details:last-child {
+  border-bottom: none;
+}
+
+.game-round {
+  margin-bottom: 20px;
+}
+
+.game-round h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation-buttons svg {
+  cursor: pointer;
+}
