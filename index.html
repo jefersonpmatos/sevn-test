@@ -72,26 +72,47 @@
 
       .game-board {
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
+        align-items: center;
         margin-top: 50px;
         color: #000;
+        padding-bottom: 15px;
       }
 
-      .game-board .team {
+      .game-board .team-home,
+      .team-away {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 100%;
         font-size: 12px;
         font-weight: 700;
+        width: 100%;
       }
 
-      .game-board .team {
-        margin: 0 14px;
+      .team-home {
+        margin-right: 10px;
       }
 
-      .game-board .team .score {
+      .team-away {
+        margin-left: 10px;
+      }
+
+      .game-board .score {
         font-size: 15px;
+      }
+
+      .game-board .game-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #dddddd;
+        width: 100%;
+        padding: 14px 0;
+      }
+
+      .game-board .game-details:last-child {
+        border-bottom: none;
       }
 
       .game-round {
@@ -127,20 +148,22 @@
           viewBox="0 0 30 30"
           fill="none"
           onclick="prevRound()"
+          id="prevButton"
         >
-          <rect width="30" height="30" rx="5" fill="#33B667" />
+          <rect width="30" height="30" rx="5" />
           <path
             d="M17 21L11 15L17 9"
             stroke="white"
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
+            id="prevButtonIcon"
           />
         </svg>
 
         <div class="rounds-info">
           <p class="rounds-title">Rodadas de Jogos</p>
-          <p class="rounds-number">Roadada 1</p>
+          <p class="rounds-number" id="roundNumber"></p>
         </div>
 
         <svg
@@ -150,6 +173,7 @@
           viewBox="0 0 30 30"
           fill="none"
           onclick="nextRound()"
+          id="nextButton"
         >
           <rect
             x="30"
@@ -158,7 +182,6 @@
             height="30"
             rx="5"
             transform="rotate(180 30 30)"
-            fill="#33B667"
           />
           <path
             d="M13 9L19 15L13 21"
@@ -169,16 +192,560 @@
           />
         </svg>
       </div>
-      <div class="game-board">
-        <div class="team">
-          <div class="team-name">Time a</div>
-          <div class="score">0</div>
+      <div class="game-board" id="gameBoard"></div>
+    </div>
+
+    <script>
+      const roundsData = [
+        {
+          round: 1,
+          games: [
+            {
+              team_home_id: "time-a",
+              team_home_name: "Time A",
+              team_home_score: 3,
+              team_away_id: "time-h",
+              team_away_name: "Time H",
+              team_away_score: 5,
+            },
+            {
+              team_home_id: "time-b",
+              team_home_name: "Time B",
+              team_home_score: 4,
+              team_away_id: "time-g",
+              team_away_name: "Time G",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-c",
+              team_home_name: "Time C",
+              team_home_score: 1,
+              team_away_id: "time-f",
+              team_away_name: "Time F",
+              team_away_score: 5,
+            },
+            {
+              team_home_id: "time-d",
+              team_home_name: "Time D",
+              team_home_score: 0,
+              team_away_id: "time-e",
+              team_away_name: "Time E",
+              team_away_score: 5,
+            },
+          ],
+        },
+        {
+          round: 2,
+          games: [
+            {
+              team_home_id: "time-a",
+              team_home_name: "Time A",
+              team_home_score: 4,
+              team_away_id: "time-g",
+              team_away_name: "Time G",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-h",
+              team_home_name: "Time H",
+              team_home_score: 4,
+              team_away_id: "time-f",
+              team_away_name: "Time F",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-b",
+              team_home_name: "Time B",
+              team_home_score: 1,
+              team_away_id: "time-e",
+              team_away_name: "Time E",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-c",
+              team_home_name: "Time C",
+              team_home_score: 5,
+              team_away_id: "time-d",
+              team_away_name: "Time D",
+              team_away_score: 4,
+            },
+          ],
+        },
+        {
+          round: 3,
+          games: [
+            {
+              team_home_id: "time-a",
+              team_home_name: "Time A",
+              team_home_score: 3,
+              team_away_id: "time-f",
+              team_away_name: "Time F",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-g",
+              team_home_name: "Time G",
+              team_home_score: 5,
+              team_away_id: "time-e",
+              team_away_name: "Time E",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-h",
+              team_home_name: "Time H",
+              team_home_score: 2,
+              team_away_id: "time-d",
+              team_away_name: "Time D",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-b",
+              team_home_name: "Time B",
+              team_home_score: 3,
+              team_away_id: "time-c",
+              team_away_name: "Time C",
+              team_away_score: 4,
+            },
+          ],
+        },
+        {
+          round: 4,
+          games: [
+            {
+              team_home_id: "time-a",
+              team_home_name: "Time A",
+              team_home_score: 2,
+              team_away_id: "time-e",
+              team_away_name: "Time E",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-f",
+              team_home_name: "Time F",
+              team_home_score: 2,
+              team_away_id: "time-d",
+              team_away_name: "Time D",
+              team_away_score: 0,
+            },
+            {
+              team_home_id: "time-g",
+              team_home_name: "Time G",
+              team_home_score: 4,
+              team_away_id: "time-c",
+              team_away_name: "Time C",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-h",
+              team_home_name: "Time H",
+              team_home_score: 1,
+              team_away_id: "time-b",
+              team_away_name: "Time B",
+              team_away_score: 3,
+            },
+          ],
+        },
+        {
+          round: 5,
+          games: [
+            {
+              team_home_id: "time-a",
+              team_home_name: "Time A",
+              team_home_score: 3,
+              team_away_id: "time-d",
+              team_away_name: "Time D",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-e",
+              team_home_name: "Time E",
+              team_home_score: 0,
+              team_away_id: "time-c",
+              team_away_name: "Time C",
+              team_away_score: 1,
+            },
+            {
+              team_home_id: "time-f",
+              team_home_name: "Time F",
+              team_home_score: 2,
+              team_away_id: "time-b",
+              team_away_name: "Time B",
+              team_away_score: 0,
+            },
+            {
+              team_home_id: "time-g",
+              team_home_name: "Time G",
+              team_home_score: 1,
+              team_away_id: "time-h",
+              team_away_name: "Time H",
+              team_away_score: 2,
+            },
+          ],
+        },
+        {
+          round: 6,
+          games: [
+            {
+              team_home_id: "time-a",
+              team_home_name: "Time A",
+              team_home_score: 2,
+              team_away_id: "time-c",
+              team_away_name: "Time C",
+              team_away_score: 4,
+            },
+            {
+              team_home_id: "time-d",
+              team_home_name: "Time D",
+              team_home_score: 2,
+              team_away_id: "time-b",
+              team_away_name: "Time B",
+              team_away_score: 4,
+            },
+            {
+              team_home_id: "time-e",
+              team_home_name: "Time E",
+              team_home_score: 1,
+              team_away_id: "time-h",
+              team_away_name: "Time H",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-f",
+              team_home_name: "Time F",
+              team_home_score: 1,
+              team_away_id: "time-g",
+              team_away_name: "Time G",
+              team_away_score: 3,
+            },
+          ],
+        },
+        {
+          round: 7,
+          games: [
+            {
+              team_home_id: "time-a",
+              team_home_name: "Time A",
+              team_home_score: 0,
+              team_away_id: "time-b",
+              team_away_name: "Time B",
+              team_away_score: 1,
+            },
+            {
+              team_home_id: "time-c",
+              team_home_name: "Time C",
+              team_home_score: 2,
+              team_away_id: "time-h",
+              team_away_name: "Time H",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-d",
+              team_home_name: "Time D",
+              team_home_score: 5,
+              team_away_id: "time-g",
+              team_away_name: "Time G",
+              team_away_score: 0,
+            },
+            {
+              team_home_id: "time-e",
+              team_home_name: "Time E",
+              team_home_score: 1,
+              team_away_id: "time-f",
+              team_away_name: "Time F",
+              team_away_score: 4,
+            },
+          ],
+        },
+        {
+          round: 8,
+          games: [
+            {
+              team_home_id: "time-h",
+              team_home_name: "Time H",
+              team_home_score: 2,
+              team_away_id: "time-a",
+              team_away_name: "Time A",
+              team_away_score: 5,
+            },
+            {
+              team_home_id: "time-g",
+              team_home_name: "Time G",
+              team_home_score: 5,
+              team_away_id: "time-b",
+              team_away_name: "Time B",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-f",
+              team_home_name: "Time F",
+              team_home_score: 1,
+              team_away_id: "time-c",
+              team_away_name: "Time C",
+              team_away_score: 0,
+            },
+            {
+              team_home_id: "time-e",
+              team_home_name: "Time E",
+              team_home_score: 4,
+              team_away_id: "time-d",
+              team_away_name: "Time D",
+              team_away_score: 3,
+            },
+          ],
+        },
+        {
+          round: 9,
+          games: [
+            {
+              team_home_id: "time-g",
+              team_home_name: "Time G",
+              team_home_score: 2,
+              team_away_id: "time-a",
+              team_away_name: "Time A",
+              team_away_score: 1,
+            },
+            {
+              team_home_id: "time-f",
+              team_home_name: "Time F",
+              team_home_score: 5,
+              team_away_id: "time-h",
+              team_away_name: "Time H",
+              team_away_score: 0,
+            },
+            {
+              team_home_id: "time-e",
+              team_home_name: "Time E",
+              team_home_score: 5,
+              team_away_id: "time-b",
+              team_away_name: "Time B",
+              team_away_score: 4,
+            },
+            {
+              team_home_id: "time-d",
+              team_home_name: "Time D",
+              team_home_score: 3,
+              team_away_id: "time-c",
+              team_away_name: "Time C",
+              team_away_score: 1,
+            },
+          ],
+        },
+        {
+          round: 10,
+          games: [
+            {
+              team_home_id: "time-f",
+              team_home_name: "Time F",
+              team_home_score: 0,
+              team_away_id: "time-a",
+              team_away_name: "Time A",
+              team_away_score: 4,
+            },
+            {
+              team_home_id: "time-e",
+              team_home_name: "Time E",
+              team_home_score: 0,
+              team_away_id: "time-g",
+              team_away_name: "Time G",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-d",
+              team_home_name: "Time D",
+              team_home_score: 1,
+              team_away_id: "time-h",
+              team_away_name: "Time H",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-c",
+              team_home_name: "Time C",
+              team_home_score: 0,
+              team_away_id: "time-b",
+              team_away_name: "Time B",
+              team_away_score: 4,
+            },
+          ],
+        },
+        {
+          round: 11,
+          games: [
+            {
+              team_home_id: "time-e",
+              team_home_name: "Time E",
+              team_home_score: 0,
+              team_away_id: "time-a",
+              team_away_name: "Time A",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-d",
+              team_home_name: "Time D",
+              team_home_score: 2,
+              team_away_id: "time-f",
+              team_away_name: "Time F",
+              team_away_score: 4,
+            },
+            {
+              team_home_id: "time-c",
+              team_home_name: "Time C",
+              team_home_score: 5,
+              team_away_id: "time-g",
+              team_away_name: "Time G",
+              team_away_score: 0,
+            },
+            {
+              team_home_id: "time-b",
+              team_home_name: "Time B",
+              team_home_score: 5,
+              team_away_id: "time-h",
+              team_away_name: "Time H",
+              team_away_score: 2,
+            },
+          ],
+        },
+        {
+          round: 12,
+          games: [
+            {
+              team_home_id: "time-d",
+              team_home_name: "Time D",
+              team_home_score: 3,
+              team_away_id: "time-a",
+              team_away_name: "Time A",
+              team_away_score: 2,
+            },
+            {
+              team_home_id: "time-c",
+              team_home_name: "Time C",
+              team_home_score: 4,
+              team_away_id: "time-e",
+              team_away_name: "Time E",
+              team_away_score: 1,
+            },
+            {
+              team_home_id: "time-b",
+              team_home_name: "Time B",
+              team_home_score: 3,
+              team_away_id: "time-f",
+              team_away_name: "Time F",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-h",
+              team_home_name: "Time H",
+              team_home_score: 0,
+              team_away_id: "time-g",
+              team_away_name: "Time G",
+              team_away_score: 4,
+            },
+          ],
+        },
+        {
+          round: 13,
+          games: [
+            {
+              team_home_id: "time-c",
+              team_home_name: "Time C",
+              team_home_score: 0,
+              team_away_id: "time-a",
+              team_away_name: "Time A",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-b",
+              team_home_name: "Time B",
+              team_home_score: 4,
+              team_away_id: "time-d",
+              team_away_name: "Time D",
+              team_away_score: 1,
+            },
+            {
+              team_home_id: "time-h",
+              team_home_name: "Time H",
+              team_home_score: 4,
+              team_away_id: "time-e",
+              team_away_name: "Time E",
+              team_away_score: 5,
+            },
+            {
+              team_home_id: "time-g",
+              team_home_name: "Time G",
+              team_home_score: 4,
+              team_away_id: "time-f",
+              team_away_name: "Time F",
+              team_away_score: 2,
+            },
+          ],
+        },
+        {
+          round: 14,
+          games: [
+            {
+              team_home_id: "time-b",
+              team_home_name: "Time B",
+              team_home_score: 0,
+              team_away_id: "time-a",
+              team_away_name: "Time A",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-h",
+              team_home_name: "Time H",
+              team_home_score: 5,
+              team_away_id: "time-c",
+              team_away_name: "Time C",
+              team_away_score: 4,
+            },
+            {
+              team_home_id: "time-g",
+              team_home_name: "Time G",
+              team_home_score: 3,
+              team_away_id: "time-d",
+              team_away_name: "Time D",
+              team_away_score: 3,
+            },
+            {
+              team_home_id: "time-f",
+              team_home_name: "Time F",
+              team_home_score: 5,
+              team_away_id: "time-e",
+              team_away_name: "Time E",
+              team_away_score: 3,
+            },
+          ],
+        },
+      ];
+      let currentRoundIndex = 0;
+
+      function renderRoundGames(roundIndex) {
+        updateButtonState();
+
+        const gameBoard = document.getElementById("gameBoard");
+        const roundNumber = document.getElementById("roundNumber");
+
+        const currentRound = roundsData[roundIndex];
+
+        roundNumber.innerHTML = `Rodada ${currentRound.round}`;
+
+        gameBoard.innerHTML = "";
+
+        currentRound.games.map((game) => {
+          gameBoard.innerHTML += `
+          <div class="game-details">
+        <div class="team-home" >
+
+            <img src="/assets/team_shield_${game.team_home_id.slice(
+              -1
+            )}.png" alt="${game.team_home_name} Shield" />
+            <div class="team-name">${game.team_home_name}</div>
+            <div class="score">${game.team_home_score}</div>
         </div>
 
-        <svg
+            <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
+          width="30"
+          height="30"
           viewBox="0 0 14 14"
           fill="none"
         >
@@ -198,13 +765,58 @@
           />
         </svg>
 
-        <div class="team">
-          <div class="score">2</div>
-          <div class="team-name">Time b</div>
+        <div class="team-away" >
+          <div class="score">${game.team_away_score}</div>
+          <div class="team-name">${game.team_away_name}</div>
+          <img src="/assets/team_shield_${game.team_away_id.slice(
+            -1
+          )}.png" alt="${game.team_away_name} Shield" />
         </div>
-      </div>
     </div>
 
-    <script></script>
+          `;
+        });
+      }
+
+      function updateButtonState() {
+        const prevButton = document.getElementById("prevButton");
+        const nextButton = document.getElementById("nextButton");
+        const prevButtonIcon = document.getElementById("prevButtonIcon");
+        const nextButtonIcon = document.getElementById("nextButtonIcon");
+
+        prevButton.disabled = currentRoundIndex === 0;
+        nextButton.disabled = currentRoundIndex === roundsData.length - 1;
+
+        prevButton.style.fill = prevButton.disabled ? "#ccc" : "#33B667";
+        prevButton.style.stroke = prevButton.disabled ? "#ccc" : "#fff";
+        prevButton.style.cursor = prevButton.disabled
+          ? "not-allowed"
+          : "pointer";
+
+        nextButton.style.fill = nextButton.disabled ? "#ccc" : "#33B667";
+        nextButton.style.stroke = nextButton.disabled ? "#ccc" : "#fff";
+        nextButton.style.cursor = nextButton.disabled
+          ? "not-allowed"
+          : "pointer";
+      }
+
+      function prevRound() {
+        if (currentRoundIndex > 0) {
+          currentRoundIndex--;
+          renderRoundGames(currentRoundIndex);
+          updateButtonState();
+        }
+      }
+
+      function nextRound() {
+        if (currentRoundIndex < roundsData.length - 1) {
+          currentRoundIndex++;
+          renderRoundGames(currentRoundIndex);
+          updateButtonState();
+        }
+      }
+
+      renderRoundGames(currentRoundIndex);
+    </script>
   </body>
 </html>
