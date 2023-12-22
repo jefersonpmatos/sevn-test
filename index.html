@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+    />
+    <style>
+      :root {
+        --custom-green: #33b667;
+        --font-inter: "Inter", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: white;
+        font-family: var(--font-inter);
+      }
+
+      header {
+        background-color: var(--custom-green);
+        height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-inter);
+      }
+
+      header .title {
+        color: #fff;
+        text-align: center;
+        font-size: 22px;
+        font-style: normal;
+        font-weight: 900;
+        line-height: normal;
+      }
+
+      .scoreboard {
+        width: 340px;
+        height: 394px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        background: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .rounds-info p {
+        color: #000;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .rounds-info .rounds-title {
+        font-size: 16px;
+      }
+
+      .rounds-info .rounds-number {
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .game-board {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+        color: #000;
+      }
+
+      .game-board .team {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .game-board .team {
+        margin: 0 14px;
+      }
+
+      .game-board .team .score {
+        font-size: 15px;
+      }
+
+      .game-round {
+        margin-bottom: 20px;
+      }
+
+      .game-round h2 {
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .navigation-buttons {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .navigation-buttons svg {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="title">SEVN ESPORTES ⚽</h1>
+    </header>
+    <div class="scoreboard">
+      <div class="navigation-buttons">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          fill="none"
+          onclick="prevRound()"
+        >
+          <rect width="30" height="30" rx="5" fill="#33B667" />
+          <path
+            d="M17 21L11 15L17 9"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+
+        <div class="rounds-info">
+          <p class="rounds-title">Rodadas de Jogos</p>
+          <p class="rounds-number">Roadada 1</p>
+        </div>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          fill="none"
+          onclick="nextRound()"
+        >
+          <rect
+            x="30"
+            y="30"
+            width="30"
+            height="30"
+            rx="5"
+            transform="rotate(180 30 30)"
+            fill="#33B667"
+          />
+          <path
+            d="M13 9L19 15L13 21"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div class="game-board">
+        <div class="team">
+          <div class="team-name">Time a</div>
+          <div class="score">0</div>
+        </div>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+        >
+          <path
+            d="M13 1L1 13"
+            stroke="#D1D1D1"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M1 1L13 13"
+            stroke="#D1D1D1"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+
+        <div class="team">
+          <div class="score">2</div>
+          <div class="team-name">Time b</div>
+        </div>
+      </div>
+    </div>
+
+    <script></script>
+  </body>
+</html>
